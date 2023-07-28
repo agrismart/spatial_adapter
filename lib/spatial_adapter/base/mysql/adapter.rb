@@ -17,7 +17,10 @@ module SpatialAdapter::Base::Mysql
         # encountered ; used when binding variables in find_by methods
         def quote(value, column = nil)
           if value.kind_of?(GeoRuby::SimpleFeatures::Geometry)
-            "GeomFromWKB(0x#{value.as_hex_wkb},#{value.srid})"
+            # MySQL 8.0 does not play well when you pass an SRID in
+            # to the ST_GeomFromWKB funtion.
+            # "GeomFromWKB(0x#{value.as_hex_wkb},#{value.srid})"
+            "ST_GeomFromWKB(0x#{value.as_hex_wkb})"
           else
             super(value,column)
           end
