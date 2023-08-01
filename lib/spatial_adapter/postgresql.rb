@@ -38,7 +38,8 @@ module ActiveRecord::ConnectionAdapters
     #Redefines the quote method to add behaviour for when a Geometry is encountered
     def quote(value, column = nil)
       if value.kind_of?(GeoRuby::SimpleFeatures::Geometry)
-        "'#{value.as_hex_ewkb}'"
+        # "'#{value.as_hex_ewkb}'"
+        "0x#{value.as_hex_ewkb}"
       else
         original_quote(value,column)
       end
