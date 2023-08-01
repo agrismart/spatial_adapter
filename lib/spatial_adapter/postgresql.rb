@@ -48,6 +48,17 @@ module ActiveRecord::ConnectionAdapters
       end
     end
 
+    alias :original_type_cast :type_cast
+    def type_cast(value, column)
+      if value.kind_of?(GeoRuby::SimpleFeatures::Geometry)
+        result = value.as_wkt
+        Rails.logger.info("Typecasting to Postgres: #{result}")
+        value = result
+      else
+        original_type_cast(value, column)
+      end
+    end
+
     def columns(table_name, name = nil) #:nodoc:
       raw_geom_infos = column_spatial_info(table_name)
 
