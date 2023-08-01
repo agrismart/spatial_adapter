@@ -40,7 +40,7 @@ module ActiveRecord::ConnectionAdapters
       if value.kind_of?(GeoRuby::SimpleFeatures::Geometry)
         # "'#{value.as_hex_ewkb}'"
         # result = "ST_GeomFromText('#{value.as_wkt}', #{value.srid})"
-        result = "'\x#{value.as_hex_ewkb}'"
+        result = "'\\x#{value.as_hex_ewkb}'"
         Rails.logger.info("Saving to Postgres: #{result}")
         result
       else
