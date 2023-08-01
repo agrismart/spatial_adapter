@@ -39,7 +39,7 @@ module ActiveRecord::ConnectionAdapters
     def quote(value, column = nil)
       if value.kind_of?(GeoRuby::SimpleFeatures::Geometry)
         # "'#{value.as_hex_ewkb}'"
-        "0x#{value.as_hex_ewkb}"
+        "ST_GeomFromText(#{value.as_wkt}, #{value.srid})"
       else
         original_quote(value,column)
       end
